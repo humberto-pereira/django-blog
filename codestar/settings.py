@@ -30,7 +30,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['codestar-pereira-fc3257cbbe2c.herokuapp.com', 'localhost']
+ALLOWED_HOSTS = ['codestar-pereira-fc3257cbbe2c.herokuapp.com', '8000-humbertopere-djangoblog-v1fuginpaze.ws-eu105.gitpod.io']
 
 
 # Application definition
@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'cloudinary_storage',
     'django.contrib.staticfiles',
-    'cloudinary'
+    'cloudinary',
     'blog',
 ]
 
