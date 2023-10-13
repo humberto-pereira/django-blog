@@ -1,5 +1,7 @@
 {% extends 'base.html' %} {% block content %}
 
+{% load crispy_forms_tags %}
+
 <div class="masthead">
     <div class="container">
         <div class="row g-0">
@@ -33,14 +35,38 @@
                 <div class="row">
 
                     <div class="col-1">
-                        <!-- The number of likes goes before the closing strong tag -->
-                        <strong class="text-secondary"><i class="far fa-heart"></i>{{ post.number_of_likes }}</strong>
+                        <strong>
+                            {% if user.is_authenticated %}
+                            <form class="d-inline" action="{% url 'post_like' post.slug %}" method="POST">
+                                {% csrf_token %}
+                                {% if liked %}
+                                <button type="submit" name="blogpost_id" value="{{ post.slug }}" class="btn-like"><i
+                                        class="fas fa-heart"></i></button>
+
+                                {% else %}
+                                <button type="submit" name="blogpost_id" value="{{ post.slug }}" class="btn-like"><i
+                                        class="far fa-heart"></i></button>
+
+                                {% endif %}
+
+                            </form>
+
+                            {% else %}
+                            <span class="text-secondary"><i class="far fa-heart"></i></span>
+
+                            {% endif %}
+
+                            <!-- The number of likes goes before the closing span tag -->
+                            <span class="text-secondary"> {{ post.number_of_likes }} </span>
+
+                        </strong>
+
                     </div>
                     <div class="col-1">
                         {% with comments.count as total_comments %}
                         <strong class="text-secondary"><i class="far fa-comments"></i>
                             <!-- Our total_comments variable goes before the closing strong tag -->
-                            {{ total.comments }}
+                            {{ total_comments }}
                         </strong>
                         {% endwith %}
                     </div>
@@ -57,6 +83,7 @@
         <div class="col-md-8 card mb-4  mt-3 ">
             <h3>Comments:</h3>
             <div class="card-body">
+
                 <!-- We want a for loop inside the tags to iterate through each comment in comments -->
                 {% for comment in comments %}
                 <div class="comments" style="padding: 10px;">
@@ -78,9 +105,33 @@
         <div class="col-md-4 card mb-4  mt-3 ">
             <div class="card-body">
                 <!-- For later -->
+                {% if commented %}
+                <div class="alert alert-success" role="alert">
+                    Your comment is awaiting approval
+                </div>
+                {% else %}
+
+                {% if user.is_authenticated %}
+
+                <h3>Leave a comment:</h3>
+                <p>Posting as: {{ user.username }}</p>
+                <form method="post" style="margin-top: 1.3em;">
+                    {{ comment_form | crispy }}
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-signup btn-lg">Submit</button>
+                </form>
+                {% endif %}
+                {% endif %}
+
             </div>
         </div>
     </div>
 </div>
-
+<script>
+    setTimeout(function () {
+        let messages = document.getElementById("msg");
+        let alert = new bootstrap.Alert(messages);
+        alert.close();
+    }, 3000);
+</script>
 {% endblock content %}

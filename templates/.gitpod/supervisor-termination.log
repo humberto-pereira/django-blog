@@ -1,0 +1,2 @@
+[410ns] Shutting down all processes 
+[426.37µs] Terminating process supervisor with PID 33 (state: S, cmdlind: [supervisor run] <nil>). 
